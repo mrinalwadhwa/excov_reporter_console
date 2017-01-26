@@ -3,14 +3,14 @@ defmodule ExCov.Reporter.Console.Mixfile do
 
   def project do
     [app: :excov_reporter_console,
-     version: "0.1.2",
+     version: "0.1.3",
      description: "Console Reporter for ExCov",
      deps: deps(),
      package: package()]
   end
 
   defp deps do
-    [{:excov, "0.1.6", github: "mrinalwadhwa/excov"}]
+    [{:excov, "0.1.7", github: "mrinalwadhwa/excov"}]
   end
 
   defp package do

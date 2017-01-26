@@ -146,7 +146,7 @@ defmodule ExCov.Reporter.Console do
       [
         IO.ANSI.format([
           :light_black,
-          :io_lib.format("~4w", [line.index + 1])
+          :io_lib.format("~4w", [line.index])
         ]),
         " | "
       ]
