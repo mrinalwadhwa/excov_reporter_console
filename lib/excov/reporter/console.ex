@@ -46,8 +46,8 @@ defmodule ExCov.Reporter.Console do
         :io_lib.format("| ~-#{width-47}s | ~10w | ~8w | ~6w | ~6.1f% |\n", [
           "PROJECT:",
           project.statistics.count_of_lines,
+          project.statistics.count_of_lines_relevant,
           project.statistics.count_of_lines_missed,
-          project.statistics.count_of_lines_covered,
           project.statistics.percentage_of_relevant_lines_covered
         ]),
         separator,
