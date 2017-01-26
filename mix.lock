@@ -1,1 +1,1 @@
-%{"excov": {:git, "https://github.com/mrinalwadhwa/excov.git", "b3ada2c435e62d4a292c46e95c6f170953383802", []}}
+%{"excov": {:hex, :excov, "0.1.7", "4842865b164c45446540f1403381a54f572e14390d62daa1878e217126dd341a", [:mix], []}}
