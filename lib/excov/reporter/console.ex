@@ -8,7 +8,7 @@ defmodule ExCov.Reporter.Console do
   @default_width 120
 
   def report!(project, options \\ []) do
-    sorted = Enum.sort(project.modules, &(&1.source_path >= &2.source_path)
+    sorted = Enum.sort(project.modules, &(&1.source_path >= &2.source_path))
     project = %{project | modules: sorted}
 
     printer = Keyword.get(options, :printer, &IO.puts/1)
