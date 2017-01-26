@@ -5,7 +5,8 @@ defmodule ExCov.Reporter.Console do
   alias ExCov.Module,  as: Module
   alias ExCov.Project, as: Project
 
-  @default_width 120
+  @default_width 80
+  @default_gutter_width 5
 
   def report!(project, options \\ []) do
     sorted = Enum.sort(project.modules, &(&1.source_path >= &2.source_path))
@@ -28,9 +29,9 @@ defmodule ExCov.Reporter.Console do
       separator = [
         "|",
         String.duplicate("-", width-45),"|",
-        String.duplicate("-", 12),"|",
         String.duplicate("-", 10),"|",
-        String.duplicate("-", 8),"|",
+        String.duplicate("-", 10),"|",
+        String.duplicate("-", 10),"|",
         String.duplicate("-", 9),
         "|\n"
       ]
@@ -38,13 +39,13 @@ defmodule ExCov.Reporter.Console do
       [
         "\n",
         separator,
-        :io_lib.format("| ~-#{width-47}s | ~10s | ~8s | ~6s | ~7s |\n", [
-          "", "LINES", "RELEVANT", "MISSED", "COVERED",
+        :io_lib.format("| ~-#{width-47}s | ~8s | ~8s | ~8s | ~7s |\n", [
+          "SUMMARY:", "LINES", "RELEVANT", "MISSED", "COVERED",
         ]),
 
         separator,
-        :io_lib.format("| ~-#{width-47}s | ~10w | ~8w | ~6w | ~6.1f% |\n", [
-          "PROJECT:",
+        :io_lib.format("| ~-#{width-47}s | ~8w | ~8w | ~8w | ~6.1f% |\n", [
+          "",
           project.statistics.count_of_lines,
           project.statistics.count_of_lines_relevant,
           project.statistics.count_of_lines_missed,
@@ -53,7 +54,7 @@ defmodule ExCov.Reporter.Console do
         separator,
 
         Enum.reduce(project.modules, [], fn(module, report) ->
-          [:io_lib.format("| ~-#{width-47}s | ~10w | ~8w | ~6w | ~6.1f% |\n", [
+          [:io_lib.format("| ~-#{width-47}s | ~8w | ~8w | ~8w | ~6.1f% |\n", [
             Path.relative_to(module.source_path, Project.root),
             module.statistics.count_of_lines,
             module.statistics.count_of_lines_relevant,
@@ -74,7 +75,7 @@ defmodule ExCov.Reporter.Console do
   @spec render_project_detail(Project.t, Keyword.t) :: iolist
   def render_project_detail(project, options) do
     if Keyword.get(options, :show_detail?, true) do
-      render_modules(project.modules, options)
+      project.modules |> Enum.reverse |> render_modules(options)
     else
       ""
     end
@@ -95,10 +96,18 @@ defmodule ExCov.Reporter.Console do
   """
   @spec render_module(Module.t, Keyword.t) :: iolist
   def render_module(module = %Module{}, options) do
-    width = Keyword.get(options, :width, @default_width)
+    width =
+      if Keyword.get(options, :show_line_number?, true) do
+        w = Keyword.get(options, :width, @default_width)
+        g = Keyword.get(options, :gutter_width, @default_gutter_width)
+        g + 1 + w
+      else
+        Keyword.get(options, :width, @default_width)
+      end
+
     [
       "\n\n",
-      module.source_path,
+      Path.relative_to(module.source_path, Project.root),
       "\n",String.duplicate("-", width),"\n",
       render_lines(module.lines, options)
     ]
@@ -142,11 +151,12 @@ defmodule ExCov.Reporter.Console do
   """
   @spec render_line_number(Line.t, Keyword.t) :: iolist
   def render_line_number(line = %Line{}, options) do
+    gutter_width = Keyword.get(options, :gutter_width, @default_gutter_width)
     if Keyword.get(options, :show_line_number?, true) do
       [
         IO.ANSI.format([
           :light_black,
-          :io_lib.format("~4w", [line.index])
+          :io_lib.format("~#{gutter_width-1}w", [line.index])
         ]),
         " | "
       ]
