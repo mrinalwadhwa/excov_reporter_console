@@ -2,8 +2,8 @@ defmodule ExCov.Reporter.Console.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :excov_console_reporter,
-     version: "0.1.0",
+    [app: :excov_reporter_console,
+     version: "0.1.2",
      description: "Console Reporter for ExCov",
      deps: deps(),
      package: package()]
@@ -14,11 +14,11 @@ defmodule ExCov.Reporter.Console.Mixfile do
   end
 
   defp package do
-    [name: :excov_console_reporter,
+    [name: :excov_reporter_console,
      maintainers: ["Mrinal Wadhwa"],
      licenses: ["MIT"],
      links: %{"GitHub" =>
-       "https://github.com/mrinalwadhwa/excov_console_reporter"
+       "https://github.com/mrinalwadhwa/excov_reporter_console"
      }]
   end
 end
